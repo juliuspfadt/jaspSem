@@ -69,7 +69,7 @@ Form
 		RadioButton
 		{
 			value: "varianceCovariance"; label: qsTr("Variance-covariance matrix")
-			IntegerField { name: "sampleSize"; label: qsTr("Sample size"); defaultValue: 0 }
+			IntegerField { name: "sampleSize"; label: qsTr("Sample size"); defaultValue: 500 }
 		}
 	}
 
@@ -83,7 +83,7 @@ Form
 
 	Section
 	{
-		title: qsTr("Output options")
+		title: qsTr("Output Options")
 
 		Group
 		{
@@ -176,61 +176,10 @@ Form
 
 	Section
 	{
-		title: qsTr("Estimation options")
+		title: qsTr("Estimation Options")
 
 		Group
 		{
-
-			DropDown
-			{
-				label: qsTr("Information matrix")
-				name: "informationMatrix"
-				values: [
-					{ value: "expected", label: qsTr("Expected") },
-					{ value: "observed", label: qsTr("Observed") }
-				]
-			}
-
-			RadioButtonGroup
-			{
-				title: qsTr("Error calculation")
-				name: "errorCalculationMethod"
-				RadioButton { value: "standard";	label: qsTr("Standard"); checked: true		}
-				RadioButton { value: "robust";		label: qsTr("Robust")						}
-				RadioButton
-				{
-					value: "bootstrap";	label: qsTr("Bootstrap")
-					IntegerField
-					{
-						name: "bootstrapSamples"
-						label: qsTr("Bootstrap samples")
-						fieldWidth: 60
-						defaultValue: 1000
-						min: 1
-					}
-					DropDown {
-                        label: qsTr("Type")
-                        name: "bootstrapCiType"
-                        values: [
-                            { label: qsTr("Bias-corrected percentile"), value: "percentileBiasCorrected"	},
-                            { label: qsTr("Percentile"),                value: "percentile"         		},
-                            { label: qsTr("Normal theory"),             value: "normalTheory"         		}
-                        ]
-                    }
-				}
-			}
-
-			CIField {
-				text: qsTr("Confidence intervals")
-				name: "ciLevel"
-			}
-
-
-		}
-
-		Group
-		{
-			CheckBox{name: "standardizedVariable"; label: qsTr("Standardize variables before estimation"); checked: false}
 			DropDown
 			{
 				name: "estimator"
@@ -260,6 +209,63 @@ Form
 					{ value: "bollenStine",				label: qsTr("Bootstrap (Bollen-Stine)")		}
 				]
 			}
+
+			DropDown
+			{
+				label: qsTr("Information matrix")
+				name: "informationMatrix"
+				values: [
+					{ value: "default",  	 label: qsTr("Auto") },
+					{ value: "expected", 	 label: qsTr("Expected") },
+					{ value: "observed", 	 label: qsTr("Observed") },
+					{ value: "firstOrder", label: qsTr("First order") }
+				]
+			}
+
+			DropDown
+			{
+				label: qsTr("Standard errors")
+				name: "errorCalculationMethod"
+				id: errorCalc
+				values: [
+					{ value: "standard",  	 label: qsTr("Standard") },
+					{ value: "robust", 	 label: qsTr("Robust") },
+					{ value: "robustHuberWhite", 	 label: qsTr("Robust Huber-White") },
+					{ value: "bootstrap", label: qsTr("Bootstrap")}
+				]
+			}
+			IntegerField
+			{
+				visible: errorCalc.value == "bootstrap"
+				name: "bootstrapSamples"
+				label: qsTr("     Bootstrap samples")
+				fieldWidth: 60
+				defaultValue: 1000
+				min: 1
+
+			}
+			DropDown {
+				visible: errorCalc.value == "bootstrap"
+				label: qsTr("     Type")
+				name: "bootstrapCiType"
+				values: [
+						{ label: qsTr("Bias-corrected percentile"), value: "percentileBiasCorrected"	},
+						{ label: qsTr("Percentile"),                value: "percentile"         		},
+						{ label: qsTr("Normal theory"),             value: "normalTheory"         		}
+				]
+			}
+
+			CIField {
+				text: qsTr("Confidence intervals")
+				name: "ciLevel"
+			}
+
+
+		}
+
+		Group
+		{
+			CheckBox{name: "standardizedVariable"; label: qsTr("Standardize variables before estimation"); checked: false}
 
 			DropDown
 			{
