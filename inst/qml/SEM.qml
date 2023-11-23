@@ -184,8 +184,8 @@ Form
 			{
 				name: "estimator"
 				label: qsTr("Estimator")
+				id: estimator
 				values: [
-					{ value: "default",	label: qsTr("Auto") },
 					{ value: "ml",		label: qsTr("ML")	},
 					{ value: "gls",		label: qsTr("GLS")	},
 					{ value: "wls",		label: qsTr("WLS")	},
@@ -200,13 +200,15 @@ Form
 				name: "modelTest"
 				label: qsTr("Model test")
 				values: [
-					{ value: "default",					label: qsTr("Auto") 						},
 					{ value: "standard",				label: qsTr("Standard")						},
 					{ value: "satorraBentler",			label: qsTr("Satorra-Bentler")				},
 					{ value: "yuanBentler",				label: qsTr("Yuan-Bentler")					},
+					{ value: "yuanBentlerMplus",				label: qsTr("Yuan-Bentler Mplus")					},
 					{ value: "meanAndVarianceAdjusted",	label: qsTr("Mean and Variance adjusted")	},
 					{ value: "scaledAndShifted",		label: qsTr("Scaled and shifted")			},
-					{ value: "bollenStine",				label: qsTr("Bootstrap (Bollen-Stine)")		}
+					{ value: "bollenStine",				label: qsTr("Bootstrap (Bollen-Stine)")		}, 
+					{ value: "browneResidualAdf", label: qsTr("Browne residual based (ADF)")}, 
+					{ value: "browneResidualNt", label: qsTr("Browne residual based (NT)")}
 				]
 			}
 
@@ -215,7 +217,6 @@ Form
 				label: qsTr("Information matrix")
 				name: "informationMatrix"
 				values: [
-					{ value: "default",  	 label: qsTr("Auto") },
 					{ value: "expected", 	 label: qsTr("Expected") },
 					{ value: "observed", 	 label: qsTr("Observed") },
 					{ value: "firstOrder", label: qsTr("First order") }
@@ -265,21 +266,37 @@ Form
 
 		Group
 		{
+			id: missingG
 			CheckBox{name: "standardizedVariable"; label: qsTr("Standardize variables before estimation"); checked: false}
 
-			DropDown
-			{
-				name: "naAction"
-				label: qsTr("Missing data handling")
-				values:
-				[
-					{ label: qsTr("FIML")				, value: "fiml"				},
+			property var withFiml: [
+					{ label: qsTr("Listwise deletion")	, value: "listwise"			},
+					{ label: qsTr("FIML")				, value: "fiml"},
+					{ label: qsTr("Pairwise")			, value: "pairwise"			},
+					{ label: qsTr("Two-stage")			, value: "twoStage"			},
+					{ label: qsTr("Robust two-stage")	, value: "twoStageRobust"	},
+					{ label: qsTr("Doubly robust")		, value: "doublyRobust"		}
+				]
+			property var noFiml: [
 					{ label: qsTr("Listwise deletion")	, value: "listwise"			},
 					{ label: qsTr("Pairwise")			, value: "pairwise"			},
 					{ label: qsTr("Two-stage")			, value: "twoStage"			},
 					{ label: qsTr("Robust two-stage")	, value: "twoStageRobust"	},
-					{ label: qsTr("Doubly robust")		, value: "doublyRobust"		},
+					{ label: qsTr("Doubly robust")		, value: "doublyRobust"		}
 				]
+			DropDown
+			{
+				name: "naAction"
+				label: qsTr("Missing data handling")
+				values: [
+					{ label: qsTr("Listwise deletion")	, value: "listwise"			},
+					{ label: qsTr("FIML")				, value: "fiml"},
+					{ label: qsTr("Pairwise")			, value: "pairwise"			},
+					{ label: qsTr("Two-stage")			, value: "twoStage"			},
+					{ label: qsTr("Robust two-stage")	, value: "twoStageRobust"	},
+					{ label: qsTr("Doubly robust")		, value: "doublyRobust"		}
+				]
+
 			}
 
 			DropDown
