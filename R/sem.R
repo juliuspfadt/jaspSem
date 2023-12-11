@@ -19,6 +19,9 @@ SEMInternal <- function(jaspResults, dataset, options, ...) {
   jaspResults$addCitation("Rosseel, Y. (2012). lavaan: An R Package for Structural Equation Modeling. Journal of Statistical Software, 48(2), 1-36. URL http://www.jstatsoft.org/v48/i02/")
 
 
+  sink(file="~/Downloads/log.txt")
+  on.exit(sink(NULL))
+
   # Read dataset
   options <- .semPrepOpts(options)
 
@@ -56,6 +59,8 @@ SEMInternal <- function(jaspResults, dataset, options, ...) {
 
   emptymod <- vapply(options[["models"]], function(x) x[["syntax"]] == "", TRUE)
   options[["models"]] <- options[["models"]][!emptymod]
+
+
   return(options)
 }
 
@@ -63,9 +68,12 @@ SEMInternal <- function(jaspResults, dataset, options, ...) {
   if (!is.null(dataset)) return(dataset)
 
   if(options[["dataType"]] == "raw") {
-    variablesToRead <- if (options[["group"]] == "") character() else options[["group"]]
-    for (model in options[["models"]])
-      variablesToRead <- unique(c(variablesToRead, model[["columns"]]))
+    variablesToRead <- ifelse(options[["group"]] == "", character(), options[["group"]])
+    for (model in options[["models"]]) {
+      # why not use lavaan to egt the original colnames...
+      originals <- lavaan::lavParseModelString(model[["modelOriginal"]])$rhs
+      variablesToRead <- unique(c(variablesToRead, encodeColNames(originals)))
+    }
 
     dataset <- .readDataSetToEnd(columns = variablesToRead)
   } else {
@@ -239,12 +247,13 @@ checkLavaanModel <- function(model, availableVars) {
 
     # create options
     lav_args <- lavopts
-    syntax   <- .semTranslateModel(options[["models"]][[i]][["syntax"]], dataset)
-    lav_args[["model"]] <- syntax
+    # syntax   <- .semTranslateModel(options[["models"]][[i]][["modelOriginal"]], dataset)
+    lav_args[["model"]] <- options[["models"]][[i]][["modelOriginal"]]
     if (options[["dataType"]] == "raw") {
+      colnames(dataset) <- decodeColNames(colnames(dataset))
       lav_args[["data"]]  <- dataset
     } else {
-      lav_args[["sample.cov"]] <- .semDataCovariance(dataset, options[["models"]][[i]][["syntax"]])
+      lav_args[["sample.cov"]] <- .semDataCovariance(dataset, options[["models"]][[i]][["modelOriginal"]])
       lav_args[["sample.nobs"]] <- options[["sampleSize"]]
     }
 
@@ -407,7 +416,7 @@ checkLavaanModel <- function(model, availableVars) {
 
 .semTranslateModel <- function(syntax, dataset) {
   #' translate model syntax to jasp column names syntax
-  usedvars <- .semGetUsedVars(syntax, colnames(dataset))
+  usedvars <- .semGetUsedVars(syntax, decodeColNames(colnames(dataset)))
 
   if (length(usedvars) == 0) {
     return(syntax)
