@@ -1102,10 +1102,10 @@
       "Version": "0.19.0",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "jasp-stats",
-      "RemoteRepo": "jaspBase",
-      "RemoteSha": "e57cdd1d3bca19ab4d6859ef74862f5b9896cec9",
       "RemoteHost": "api.github.com",
+      "RemoteRepo": "jaspBase",
+      "RemoteUsername": "jasp-stats",
+      "RemoteSha": "4e8b1a173f3331a0ff21249c0d91a07cdc0b6d5c",
       "Requirements": [
         "R6",
         "Rcpp",
@@ -1134,7 +1134,7 @@
         "systemfonts",
         "withr"
       ],
-      "Hash": "9481bbd3b8c125a1400e0130a227e01e"
+      "Hash": "31b3821346b2946b9f7dd2995eabb9e5"
     },
     "jaspGraphs": {
       "Package": "jaspGraphs",
@@ -1164,10 +1164,10 @@
       "Version": "0.19.0",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "jasp-stats",
-      "RemoteRepo": "jaspTools",
-      "RemoteSha": "877076408a4d3ff432348a8c2672f235a91610d8",
       "RemoteHost": "api.github.com",
+      "RemoteRepo": "jaspTools",
+      "RemoteUsername": "jasp-stats",
+      "RemoteSha": "9fd59c57318c53f6f28b730a2bf26c4709c41f2a",
       "Requirements": [
         "archive",
         "data.table",
@@ -1182,7 +1182,7 @@
         "testthat",
         "vdiffr"
       ],
-      "Hash": "ffa480855ade26367eb5f097b75a20ae"
+      "Hash": "07bbe55883416c79fa1c27b75ceac453"
     },
     "jpeg": {
       "Package": "jpeg",
@@ -1912,9 +1912,12 @@
     "renv": {
       "Package": "renv",
       "Version": "1.0.10",
-      "OS_type": null,
+      "Source": "Repository",
       "Repository": "CRAN",
-      "Source": "Repository"
+      "Requirements": [
+        "utils"
+      ],
+      "Hash": "d0387d5687ec933dd7587efd4cfa2d85"
     },
     "reshape2": {
       "Package": "reshape2",
