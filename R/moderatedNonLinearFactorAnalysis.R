@@ -254,7 +254,7 @@ ModeratedNonLinearFactorAnalysisInternal <- function(jaspResults, dataset, optio
   modelOptions <- .extractIncludeModerationPaths(options[["moderationIncludeList"]])
   modelOptionsPath <- unlist(modelOptions$paths, recursive = FALSE, use.names = FALSE)
 
-  src <- createJaspQmlSource(sourceID = "plotOptions", value = plotOpts)
+  src <- createJaspQmlSource(sourceID = "plotOptionsForQml", value = plotOpts)
   src$dependOn(optionsFromObject = jaspResults[["mainContainer"]],
                options = c("configuralInvariance", "metricInvariance",
                            "scalarInvariance", "strictInvariance", "customInvariance"),
